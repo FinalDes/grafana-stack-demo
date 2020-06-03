@@ -1,0 +1,41 @@
+version: '2.4'
+
+services:
+  loki:
+    image: grafana/loki:master
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
+      - ./loki/local_bind_volume_dir:/data/loki
+    networks:
+      - loki
+  grafana:
+    image: grafana/grafana:master
+    ports:
+      - "3000:3000"
+    networks:
+      - loki
+    volumes:
+      - ./grafana:/etc/grafana/provisioning
+    depends_on: 
+      - loki
+    logging:
+      driver: loki
+      options:
+        loki-url: http://host.docker.internal:3100/loki/api/v1/push
+  app:
+    image: alpine:latest
+    entrypoint: ping host.docker.internal
+    networks:
+      - loki
+    depends_on: 
+      - loki
+    logging:
+      driver: loki
+      options:
+        loki-url: http://host.docker.internal:3100/loki/api/v1/push
+networks:
+  loki:
