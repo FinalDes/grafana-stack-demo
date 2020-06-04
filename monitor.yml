@@ -1,0 +1,38 @@
+version: '2.4'
+
+services:
+  loki:
+    image: grafana/loki:1.5.0
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
+      - ./loki/local_bind_volume_dir:/data/loki
+    networks:
+      - loki
+  grafana:
+    image: grafana/grafana:7.0.2
+    ports:
+      - "3000:3000"
+    networks:
+      - loki
+    volumes:
+      - ./grafana:/etc/grafana/provisioning
+    depends_on: 
+      - loki
+    logging:
+      driver: loki
+      options:
+        loki-url: http://host.docker.internal:3100/loki/api/v1/push
+  prometheus:
+    image: prom/prometheus:v2.18.1
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    # ports:
+    #   - "9090:9090"
+    logging:
+      driver: loki
+      options:
+        loki-url: http://host.docker.internal:3100/loki/api/v1/push
