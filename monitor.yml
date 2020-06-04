@@ -10,14 +10,10 @@ services:
     volumes:
       - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
       - ./loki/local_bind_volume_dir:/data/loki
-    networks:
-      - loki
   grafana:
     image: grafana/grafana:7.0.2
     ports:
       - "3000:3000"
-    networks:
-      - loki
     volumes:
       - ./grafana:/etc/grafana/provisioning
     depends_on: 
