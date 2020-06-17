@@ -16,7 +16,7 @@ services:
       - ./loki/local_bind_volume_dir:/data/loki
   grafana:
     <<: *loki
-    image: grafana/grafana:7.0.2
+    image: grafana/grafana:7.0.3
     ports:
       - "3000:3000"
     volumes:
