@@ -21,9 +21,9 @@ scrape_configs:
       - 'tasks.node-exporter'
       type: 'A'
       port: 9100
-  - job_name: 'tasks.cadvisor'
+  - job_name: 'cadvisor'
     dns_sd_configs:
     - names:
-      - 'cadvisor'
+      - 'tasks.cadvisor'
       type: 'A'
       port: 8080
