@@ -25,6 +25,14 @@ services:
       - ./grafana:/etc/grafana/provisioning
     depends_on: 
       - loki
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
   cadvisor:
     <<: *loki
     image: google/cadvisor
@@ -37,6 +45,13 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
       - "8080:8080"
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
   node-exporter:
     <<: *loki
     image: prom/node-exporter:v1.0.1
@@ -51,6 +66,13 @@ services:
       - '--collector.textfile.directory=/etc/node-exporter/'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
       - '--no-collector.ipvs'
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
   prometheus:
     <<: *loki
     image: prom/prometheus:v2.19.0
@@ -61,6 +83,14 @@ services:
       - prometheus:/prometheus
     ports:
       - "9090:9090"
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2048M
+        reservations:
+          memory: 128M
 configs:
   prometheus:
     file: ./prometheus/prometheus.yml
