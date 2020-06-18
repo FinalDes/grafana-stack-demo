@@ -56,7 +56,7 @@ services:
     <<: *loki
     image: prom/prometheus:v2.19.0
     configs: 
-      - source: prometheus_config
+      - source: prometheus
         target: /etc/prometheus/prometheus.yml
     volumes:
       - prometheus:/prometheus
