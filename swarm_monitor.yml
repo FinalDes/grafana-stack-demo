@@ -1,5 +1,7 @@
 version: '3.8'
 x-loki: &loki
+  networks:
+     - monitor
   logging:
     driver: loki
     options:
@@ -98,3 +100,10 @@ configs:
     file: ./loki/loki-local-config.yaml
 volumes:
   prometheus:
+networks:
+  monitor:
+    name: monitor
+    driver: overlay
+    attachable: true
+    config:
+    - subnet: 172.28.0.0/16
