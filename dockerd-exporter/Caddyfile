@@ -1,8 +1,4 @@
-:9323 {
-    proxy / {$DOCKER_GWBRIDGE_IP}:9323 {
-            transparent
-        }
-
-    errors stderr
-    tls off
+http://:9323 {
+    reverse_proxy / 172.28.0.1:9323
+    handle_errors stderr
 }
