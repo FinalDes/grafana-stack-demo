@@ -52,10 +52,15 @@ services:
   prometheus:
     <<: *loki
     image: prom/prometheus:v2.19.0
+    configs: 
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus:/prometheus
     ports:
       - "9090:9090"
+config:
+  prometheus_config:
+    file: ./prometheus/prometheus.yml
 volumes:
   prometheus:
