@@ -12,7 +12,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
+      - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml:ro
       - ./loki/local_bind_volume_dir:/data/loki
   grafana:
     <<: *loki
@@ -53,7 +53,7 @@ services:
     <<: *loki
     image: prom/prometheus:v2.19.0
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus:/prometheus
     ports:
       - "9090:9090"
