@@ -75,6 +75,20 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+  dockerd-exporter:
+    image: caddy:2.0.0
+    environment:
+      - DOCKER_GWBRIDGE_IP=172.28.0.1
+    configs:
+      - source: dockerd_config
+        target: /etc/caddy/Caddyfile
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
   prometheus:
     <<: *loki
     image: prom/prometheus:v2.19.0
@@ -98,6 +112,8 @@ configs:
     file: ./prometheus/prometheus.yml
   loki:
     file: ./loki/loki-local-config.yaml
+  dockerd_config:
+    file: ./dockerd-exporter/Caddyfile
 volumes:
   prometheus:
 networks:
