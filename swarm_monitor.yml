@@ -7,12 +7,15 @@ x-loki: &loki
 services:
   loki:
     image: grafana/loki:1.5.0
-    container_name: loki
+    # container_name: loki
     command: -config.file=/etc/loki/local-config.yaml
     ports:
       - "3100:3100"
+    configs:
+      - source: loki
+        target: /etc/loki/loki-local-config.yaml
     volumes:
-      - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
+      # - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
       - ./loki/local_bind_volume_dir:/data/loki
   grafana:
     <<: *loki
@@ -59,8 +62,10 @@ services:
       - prometheus:/prometheus
     ports:
       - "9090:9090"
-config:
-  prometheus_config:
+configs:
+  prometheus:
     file: ./prometheus/prometheus.yml
+  loki:
+    file: ./loki/loki-local-config.yaml
 volumes:
   prometheus:
