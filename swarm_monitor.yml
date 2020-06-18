@@ -15,7 +15,6 @@ services:
       - source: loki
         target: /etc/loki/loki-local-config.yaml
     volumes:
-      # - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
       - ./loki/local_bind_volume_dir:/data/loki
   grafana:
     <<: *loki
