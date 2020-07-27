@@ -1,0 +1,43 @@
+version: '3.8'
+x-loki: &loki
+  networks:
+    - loki
+  logging:
+    driver: loki
+    options:
+      loki-url: http://127.0.0.1:3100/loki/api/v1/push
+services:
+  loki:
+    image: grafana/loki:1.5.0
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
+      - ./loki/local_bind_volume_dir:/data/loki
+    networks:
+      - loki
+  grafana:
+    <<: *loki
+    image: grafana/grafana:7.0.3
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/etc/grafana/provisioning
+  app:
+    <<: *loki
+    image: alpine:latest
+    entrypoint: ping 172.28.0.1
+configs:
+  loki:
+    file: ./loki/loki-local-config.yaml
+networks:
+  loki:
+    name: loki
+    driver: overlay
+    attachable: true
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.28.0.0/16
