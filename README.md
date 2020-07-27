@@ -15,3 +15,7 @@ docker plugin ls
 ID                  NAME         DESCRIPTION           ENABLED
 ac720b8fcfdb        loki         Loki Logging Driver   true
 ```
+
+## docker compose config list
+loki_swarm_only.yml tested on single node swarm
+loki-demo.yml simple docker-compose setup to check how loki work
