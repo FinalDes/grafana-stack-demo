@@ -18,6 +18,9 @@ services:
       - ./loki/local_bind_volume_dir:/data/loki
     networks:
       - loki
+    configs:
+      - source: loki
+        target: /etc/loki/loki-local-config.yaml
   grafana:
     <<: *loki
     image: grafana/grafana:7.0.3
@@ -31,6 +34,7 @@ services:
     entrypoint: ping 172.28.0.1
 configs:
   loki:
+    name: loki
     file: ./loki/loki-local-config.yaml
 networks:
   loki:
