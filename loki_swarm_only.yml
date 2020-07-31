@@ -14,7 +14,6 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./loki/loki-local-config.yaml:/etc/loki/loki-local-config.yaml
       - ./loki/local_bind_volume_dir:/data/loki
     networks:
       - loki
